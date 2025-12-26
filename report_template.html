@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SOC 2 Evidence Validator Report</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#0f1b33;
+      --text:#e7eefc;
+      --muted:#9bb0d1;
+      --line:rgba(255,255,255,.08);
+      --accent:#7c5cff;
+      --ok:#22c55e;
+      --warn:#f59e0b;
+      --crit:#ef4444;
+      --chip:rgba(124,92,255,.16);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background:radial-gradient(1200px 600px at 20% 0%, rgba(124,92,255,.18), transparent 60%),
+                 radial-gradient(900px 500px at 80% 10%, rgba(34,197,94,.10), transparent 55%),
+                 var(--bg);
+      color:var(--text);
+    }
+    a{color:var(--text); text-decoration:none; border-bottom:1px solid rgba(255,255,255,.25)}
+    a:hover{border-bottom-color:rgba(255,255,255,.6)}
+    .wrap{max-width:1100px; margin:32px auto; padding:0 16px 56px}
+    header{
+      display:flex; gap:16px; align-items:flex-start; justify-content:space-between;
+      border:1px solid var(--line); background:linear-gradient(180deg, rgba(255,255,255,.04), transparent);
+      border-radius:16px; padding:18px 18px 14px;
+    }
+    .brand{
+      display:flex; gap:12px; align-items:center;
+    }
+    .logo{
+      width:44px; height:44px; border-radius:12px;
+      background:linear-gradient(135deg, rgba(124,92,255,.9), rgba(124,92,255,.2));
+      box-shadow:0 0 0 1px rgba(255,255,255,.10) inset, 0 12px 30px rgba(0,0,0,.25);
+      position:relative;
+    }
+    .logo:after{
+      content:"S";
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:800; letter-spacing:.4px;
+    }
+    h1{margin:0; font-size:18px; line-height:1.2}
+    .subtitle{margin:2px 0 0; color:var(--muted); font-size:12.5px}
+    .meta{
+      display:grid; gap:6px; text-align:right;
+      font-size:12.5px; color:var(--muted);
+    }
+    .meta b{color:var(--text); font-weight:650}
+    .grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+    }
+    @media (max-width: 900px){
+      header{flex-direction:column; align-items:stretch}
+      .meta{text-align:left}
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      border:1px solid var(--line);
+      background:rgba(15,27,51,.72);
+      border-radius:16px;
+      padding:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,.18);
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:13px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    .kvs{
+      display:grid;
+      grid-template-columns: 170px 1fr;
+      gap:10px 12px;
+      font-size:13px;
+      align-items:start;
+    }
+    .kvs .k{color:var(--muted)}
+    .kvs .v{color:var(--text)}
+    .chips{display:flex; flex-wrap:wrap; gap:8px}
+    .chip{
+      padding:6px 10px;
+      border-radius:999px;
+      background:var(--chip);
+      border:1px solid rgba(124,92,255,.30);
+      font-size:12.5px;
+      color:var(--text);
+    }
+    .hr{height:1px; background:var(--line); margin:14px 0}
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.12);
+      font-size:13px;
+    }
+    th, td{
+      padding:10px 10px;
+      border-bottom:1px solid var(--line);
+      vertical-align:top;
+    }
+    th{
+      color:var(--muted);
+      font-weight:650;
+      text-align:left;
+      background:rgba(255,255,255,.04);
+    }
+    tr:last-child td{border-bottom:none}
+    .sev{
+      font-weight:700; font-size:12px;
+      padding:4px 8px; border-radius:999px;
+      display:inline-flex; align-items:center; gap:6px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+    }
+    .sev i{width:8px; height:8px; border-radius:99px; display:inline-block}
+    .sev.low i{background:var(--ok)}
+    .sev.med i{background:var(--warn)}
+    .sev.high i{background:var(--crit)}
+    .mono{font-family:var(--mono)}
+    .muted{color:var(--muted)}
+    .note{
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px dashed rgba(255,255,255,.18);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      font-size:12.5px;
+      line-height:1.45;
+    }
+    footer{
+      margin-top:16px;
+      color:var(--muted);
+      font-size:12.5px;
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>SOC 2 Evidence Validator — Audit Report</h1>
+          <div class="subtitle">Shamir Cracker Lab • Evidence integrity • Control mapping • Actionable remediation</div>
+        </div>
+      </div>
+
+      <div class="meta">
+        <div><b>Report ID:</b> <span class="mono">{{report_id}}</span></div>
+        <div><b>Generated:</b> {{generated_at}}</div>
+        <div><b>Validator version:</b> <span class="mono">{{validator_version}}</span></div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Engagement summary</h2>
+        <div class="kvs">
+          <div class="k">Client / system</div>
+          <div class="v">{{client_or_system}}</div>
+
+          <div class="k">Standard</div>
+          <div class="v">{{standard}}</div>
+
+          <div class="k">Trust services criteria</div>
+          <div class="v">
+            <div class="chips">
+              <span class="chip">Security</span>
+              <span class="chip">Availability</span>
+              <span class="chip">Confidentiality</span>
+              <span class="chip">Processing integrity</span>
+              <span class="chip">Privacy</span>
+            </div>
+          </div>
+
+          <div class="k">Evidence scope</div>
+          <div class="v">{{evidence_scope}}</div>
+
+          <div class="k">Evidence location</div>
+          <div class="v mono">{{evidence_path}}</div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="note">
+          <b>Disclaimer:</b> This report is based on the evidence provided and the validator’s integrity checks.
+          It does not replace an external auditor’s opinion. Findings and severity are prioritized for remediation and audit readiness.
+        </div>
+      </section>
+
+      <aside class="card">
+        <h2>Key metrics</h2>
+        <div class="kvs">
+          <div class="k">Files scanned</div>
+          <div class="v"><b>{{files_scanned}}</b></div>
+
+          <div class="k">Controls mapped</div>
+          <div class="v"><b>{{controls_mapped}}</b></div>
+
+          <div class="k">Findings total</div>
+          <div class="v"><b>{{findings_total}}</b></div>
+
+          <div class="k">Critical / high</div>
+          <div class="v"><b>{{crit_high_count}}</b></div>
+
+          <div class="k">Evidence gaps</div>
+          <div class="v"><b>{{evidence_gaps_count}}</b></div>
+
+          <div class="k">Retest required</div>
+          <div class="v"><b>{{retest_required}}</b></div>
+        </div>
+
+        <div class="hr"></div>
+
+        <h2>Contacts</h2>
+        <div class="kvs">
+          <div class="k">Twitter</div>
+          <div class="v"><a href="https://twitter.com/shamircrackerlab">@shamircrackerlab</a></div>
+          <div class="k">LinkedIn</div>
+          <div class="v"><a href="https://linkedin.com/in/shamircrackerlab">linkedin.com/in/shamircrackerlab</a></div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="card" style="margin-top:14px;">
+      <h2>Scope and methodology</h2>
+      <table>
+        <tr>
+          <th style="width:220px;">Area</th>
+          <th>Approach</th>
+        </tr>
+        <tr>
+          <td>Evidence intake</td>
+          <td>Inventory, file-type classification, naming consistency checks, and duplication detection.</td>
+        </tr>
+        <tr>
+          <td>Integrity checks</td>
+          <td>Timestamp correlation, metadata sanity checks, source traceability, and redaction-safe proof handling.</td>
+        </tr>
+        <tr>
+          <td>Control mapping</td>
+          <td>Mapping evidence to SOC 2 controls (e.g., CC6.x access controls) using a defined control catalog.</td>
+        </tr>
+        <tr>
+          <td>Reporting</td>
+          <td>Audit-ready, concise report focusing on gaps, highest-risk issues, and exact remediation steps.</td>
+        </tr>
+      </table>
+      <div class="muted" style="margin-top:10px;">
+        Evidence and outputs should be stored in a restricted, access-logged repository (least privilege, immutable retention where applicable).
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:14px;">
+      <h2>Findings</h2>
+      <table>
+        <tr>
+          <th style="width:120px;">Severity</th>
+          <th style="width:140px;">Control</th>
+          <th>Title</th>
+          <th style="width:220px;">Proof</th>
+        </tr>
+
+        <!-- Example rows: replace with real findings -->
+        <tr>
+          <td><span class="sev high"><i></i>HIGH</span></td>
+          <td class="mono">CC6.1</td>
+          <td>Evidence for access review cadence is missing or incomplete</td>
+          <td class="mono muted">{{proof_ref_1}}</td>
+        </tr>
+        <tr>
+          <td><span class="sev med"><i></i>MEDIUM</span></td>
+          <td class="mono">CC2.1</td>
+          <td>Logging evidence exists but lacks source traceability metadata</td>
+          <td class="mono muted">{{proof_ref_2}}</td>
+        </tr>
+        <tr>
+          <td><span class="sev low"><i></i>LOW</span></td>
+          <td class="mono">CC1.1</td>
+          <td>Policy document naming is inconsistent (audit friction)</td>
+          <td class="mono muted">{{proof_ref_3}}</td>
+        </tr>
+      </table>
+
+      <div class="hr"></div>
+
+      <h2>Recommendations</h2>
+      <table>
+        <tr>
+          <th style="width:160px;">Priority</th>
+          <th>Recommendation</th>
+          <th style="width:200px;">Owner</th>
+        </tr>
+        <tr>
+          <td><b>1 — Immediate</b></td>
+          <td>Implement and document recurring access reviews with evidence export, reviewer identity, and approval trail.</td>
+          <td class="muted">{{owner_1}}</td>
+        </tr>
+        <tr>
+          <td><b>2 — This week</b></td>
+          <td>Standardize evidence metadata: source system, export method, time range, and redaction notes.</td>
+          <td class="muted">{{owner_2}}</td>
+        </tr>
+        <tr>
+          <td><b>3 — This sprint</b></td>
+          <td>Adopt a naming convention and folder structure for policies, procedures, and logs to reduce audit friction.</td>
+          <td class="muted">{{owner_3}}</td>
+        </tr>
+      </table>
+    </section>
+
+    <section class="card" style="margin-top:14px;">
+      <h2>Control mapping snapshot</h2>
+      <table>
+        <tr>
+          <th style="width:140px;">Control</th>
+          <th>Description</th>
+          <th style="width:220px;">Evidence artifacts</th>
+          <th style="width:120px;">Status</th>
+        </tr>
+        <tr>
+          <td class="mono">CC1.1</td>
+          <td>Control environment and governance artifacts</td>
+          <td class="mono muted">{{evidence_cc11}}</td>
+          <td><span class="chip">Partial</span></td>
+        </tr>
+        <tr>
+          <td class="mono">CC2.1</td>
+          <td>Communication and information supporting operations</td>
+          <td class="mono muted">{{evidence_cc21}}</td>
+          <td><span class="chip">Mapped</span></td>
+        </tr>
+        <tr>
+          <td class="mono">CC6.1</td>
+          <td>Logical access controls, authentication, and authorization</td>
+          <td class="mono muted">{{evidence_cc61}}</td>
+          <td><span class="chip">Gap</span></td>
+        </tr>
+      </table>
+      <div class="muted" style="margin-top:10px;">
+        Note: Replace placeholders with actual mapping results generated by the validator.
+      </div>
+    </section>
+
+    <footer>
+      <div>Prepared by <b>Shamir Cracker Lab</b> • <span class="mono">{{report_id}}</span></div>
+      <div class="muted">Redact sensitive data before sharing externally.</div>
+    </footer>
+
+  </div>
+</body>
+</html>
