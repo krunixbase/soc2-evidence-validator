@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SOC 2 Evidence Validator — Demo Report</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: #0b1220;
+      color: #e7eefc;
+      margin: 0;
+      padding: 32px;
+    }
+    h1, h2, h3 { margin-top: 0 }
+    .card {
+      background: #0f1b33;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .meta {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 8px 16px;
+      font-size: 14px;
+    }
+    .meta b { color: #9bb0d1 }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      text-align: left;
+    }
+    th {
+      color: #9bb0d1;
+      font-weight: 600;
+    }
+    .sev {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 12px;
+      display: inline-block;
+    }
+    .high { background: #ef4444 }
+    .medium { background: #f59e0b }
+    .low { background: #22c55e }
+    footer {
+      margin-top: 32px;
+      font-size: 13px;
+      color: #9bb0d1;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <h1>SOC 2 Evidence Validator — Audit Report</h1>
+    <p><b>Prepared by:</b> Shamir Cracker Lab (@shamircrackerlab)</p>
+  </div>
+
+  <div class="card">
+    <h2>Engagement Summary</h2>
+    <div class="meta">
+      <b>Client / System</b><div>Demo SaaS Platform</div>
+      <b>Standard</b><div>SOC 2 Type II</div>
+      <b>Report ID</b><div>SCRL-SOC2-DEMO-001</div>
+      <b>Generated</b><div>2025-12-26</div>
+      <b>Evidence Scope</b><div>Access control, logging, governance documentation</div>
+      <b>Evidence Location</b><div>/evidence/demo</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Key Metrics</h2>
+    <div class="meta">
+      <b>Files scanned</b><div>42</div>
+      <b>Controls mapped</b><div>3</div>
+      <b>Total findings</b><div>3</div>
+      <b>Critical / High</b><div>1</div>
+      <b>Evidence gaps</b><div>1</div>
+      <b>Retest required</b><div>Yes</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Findings</h2>
+    <table>
+      <tr>
+        <th>Severity</th>
+        <th>Control</th>
+        <th>Description</th>
+        <th>Evidence</th>
+      </tr>
+      <tr>
+        <td><span class="sev high">HIGH</span></td>
+        <td>CC6.1</td>
+        <td>Access review evidence missing for Q3 period</td>
+        <td>access_review_q3.pdf (missing)</td>
+      </tr>
+      <tr>
+        <td><span class="sev medium">MEDIUM</span></td>
+        <td>CC2.1</td>
+        <td>Log exports lack source system metadata</td>
+        <td>logs_export.csv</td>
+      </tr>
+      <tr>
+        <td><span class="sev low">LOW</span></td>
+        <td>CC1.1</td>
+        <td>Policy naming inconsistent across folders</td>
+        <td>policy_docs/</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Recommendations</h2>
+    <table>
+      <tr>
+        <th>Priority</th>
+        <th>Recommendation</th>
+        <th>Owner</th>
+      </tr>
+      <tr>
+        <td>Immediate</td>
+        <td>Implement quarterly access reviews with signed approval records</td>
+        <td>Security Lead</td>
+      </tr>
+      <tr>
+        <td>This week</td>
+        <td>Standardize log export metadata (source, range, method)</td>
+        <td>DevOps</td>
+      </tr>
+      <tr>
+        <td>This sprint</td>
+        <td>Adopt unified naming convention for governance documents</td>
+        <td>Compliance</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Control Mapping Snapshot</h2>
+    <table>
+      <tr>
+        <th>Control</th>
+        <th>Description</th>
+        <th>Status</th>
+      </tr>
+      <tr>
+        <td>CC1.1</td>
+        <td>Control environment and governance</td>
+        <td>Partial</td>
+      </tr>
+      <tr>
+        <td>CC2.1</td>
+        <td>Communication and information</td>
+        <td>Mapped</td>
+      </tr>
+      <tr>
+        <td>CC6.1</td>
+        <td>Logical access controls</td>
+        <td>Gap</td>
+      </tr>
+    </table>
+  </div>
+
+  <footer>
+    <div>© 2025 Shamir Cracker Lab</div>
+    <div>Demo report — redact before external sharing</div>
+  </footer>
+
+</body>
+</html>
