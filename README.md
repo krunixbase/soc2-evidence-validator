@@ -8,5 +8,9 @@ Includes control mapping, timestamp integrity, and audit-ready HTML reports.
 - CLI validator (validate.py)
 - HTML report output (report.html)
 
+## Branding
+Twitter: [@shamircrackerlab](https://twitter.com/shamircrackerlab)  
+LinkedIn: [linkedin.com/in/shamircrackerlab](https://linkedin.com/in/shamircrackerlab)
+
 ## Author
 Shamir Cracker Lab — @shamircrackerlab
