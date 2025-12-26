@@ -1,3 +1,4 @@
+This repository demonstrates how audit‑ready compliance evidence can be validated and presented.
 # soc2-evidence-validator
 
 Modular validator for SOC 2 Type II evidence artifacts.
